@@ -1,0 +1,95 @@
+package ie.gmit.sw;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import javax.imageio.ImageIO;
+//import javax.swing.text.html.HTMLDocument.Iterator;
+
+public class ReallySimpleWordCloud extends WordFrequency3 {
+	
+	private static int n = 20; // number of words to place
+	private static final int WIDTH = 800;
+	private static final int HEIGHT = 600;
+
+	public static void placeWords (Queue<WordFrequency3> q, Graphics g, int n) {
+		
+		Iterator<WordFrequency3> i = q.iterator();
+		int counter = 0;
+		int max = Integer.MIN_VALUE;
+		int min = Integer.MAX_VALUE;
+		
+		while (i.hasNext() && counter < n) {
+			//int j = i.next().getFrequency();
+			//if (i > max) max = j;
+			//if (i < min) min = j;
+			counter++;	
+		}
+		
+		counter = 0;
+		
+		while (q.isEmpty() && counter < n) {
+			WordFrequency3 wf = q.poll();
+			Font font = new Font(Font.SANS_SERIF, Font.ITALIC, 42);
+			g.setColor(Color.yellow);
+			g.drawString("TEST", 10, 150);		
+			counter++;
+			System.out.println(q);
+		}	
+	
+	}
+	
+	
+	
+	/*public double scale(int inVal, int inMin, int inMax) {
+		
+		double max = Double.valueOf(inMax);
+		double min = Double.valueOf(inMin);
+		double value = Double.valueOf(inVal);
+		
+		return ();
+	}*/
+
+	public static void main(String args[]) throws Exception {
+		
+		Queue<WordFrequency3> q = new LinkedList<>();
+		
+		// create image
+		BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_4BYTE_ABGR);
+		
+		// add words
+		placeWords(q, image.getGraphics(), n);
+		
+		// write image
+		ImageIO.write(image, "png", new File("image.png"));
+		
+		// finish
+		System.out.println("Image completed.");
+		
+		/*Font font = new Font(Font.SANS_SERIF, Font.BOLD, 62);
+		BufferedImage image1 = new BufferedImage(600, 300, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics graphics = image1.getGraphics();
+		graphics.setColor(Color.red);
+		graphics.setFont(font);
+		graphics.drawString("Data Structures", 0, 100);
+
+		font = new Font(Font.SANS_SERIF, Font.ITALIC, 42);
+		graphics.setFont(font);
+		graphics.setColor(Color.yellow);
+		graphics.drawString("and Algorithms", 10, 150);
+
+		font = new Font(Font.MONOSPACED, Font.PLAIN, 22);
+		graphics.setFont(font);
+		graphics.setColor(Color.blue);
+		graphics.drawString("2019 Assignment", 40, 180);		
+		
+		graphics.dispose();
+		ImageIO.write(image1, "png", new File("image.png"));*/
+	}
+}

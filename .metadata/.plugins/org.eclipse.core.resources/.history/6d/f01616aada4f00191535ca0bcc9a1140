@@ -1,0 +1,100 @@
+// https://github.com/a-r-d/java-1-class-demos/blob/master/collections-and-generics/week10/CountWordInstances.java
+
+package ie.gmit.sw;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.imageio.ImageIO;
+
+public class WordFrequency3 {
+		
+    private static long startTime = System.currentTimeMillis();
+
+	public static void main(String[] args) throws Exception {
+
+		Path path = Paths.get(System.getProperty("user.dir")).resolve("WarAndPeace-LeoTolstoy.txt");
+		
+		BufferedReader reader = new BufferedReader(new FileReader(path.toFile()));
+		
+		int countword = 0;
+		
+		Map<String, Integer> frequency = new TreeMap<String, Integer>();
+	
+		String line = reader.readLine();
+		while(line != null) {
+			// System.out.println("Processing line: " + line);
+			if(!line.trim().equals("")) {
+				String [] words = line.split(" ");
+
+				for(String word : words) {
+					if(word == null || word.trim().equals("")) {
+						continue;
+					}
+					String processed = word.toLowerCase();
+					processed = processed.replace(",", "");
+					countword++;
+					if(frequency.containsKey(processed)) {
+						frequency.put(processed, frequency.get(processed) + 1);
+					} else {
+						frequency.put(processed, 1);
+					}
+				} // for
+			}	
+			line = reader.readLine();
+		} // while
+			
+		// System.out.println(frequency);
+		
+		int mostFrequentlyUsed = 0;
+		String theWord = null;
+		
+		/*for(String word : frequency.keySet()) {
+			Integer theVal = frequency.get(word);
+			if(theVal > mostFrequentlyUsed) {
+				mostFrequentlyUsed = theVal;
+				theWord = word;
+			}
+		} // for*/
+		
+		
+		BufferedImage image = new BufferedImage(600, 800, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics graphics = image.getGraphics();
+		Font font = new Font(Font.SANS_SERIF, Font.ITALIC, 42);
+		graphics.setColor(Color.yellow);
+
+		
+		for (String word : frequency.keySet()) {
+			int count = frequency.get(word);
+			Integer theVal = frequency.get(word);
+			if(theVal > mostFrequentlyUsed) {
+				mostFrequentlyUsed = theVal;
+				theWord = word;
+			}
+		   	graphics.drawString(word, 10, 150);		
+		   	System.out.println(count + "\t" + word);
+		} // for
+
+		ImageIO.write(image, "png", new File("image.png"));
+	
+		System.out.println();
+		System.out.printf("the most frequently used word is '%s', %d times", 
+				theWord, mostFrequentlyUsed);
+		System.out.println("\nTotals words = " + countword);
+		
+		
+		
+		long endTime = System.currentTimeMillis();
+        System.out.println("It took " + (endTime - startTime) + " milliseconds"); 		
+	}
+
+}	
